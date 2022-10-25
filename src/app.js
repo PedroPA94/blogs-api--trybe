@@ -1,5 +1,5 @@
 const express = require('express');
-const { loginController } = require('./controllers');
+const { loginController, userController } = require('./controllers');
 
 // ...
 
@@ -10,6 +10,7 @@ app.use(express.json());
 // ...
 
 app.post('/login', loginController.login);
+app.post('/user', userController.createUser);
 
 app.use((err, _req, res, _next) => {
   res.status(500).json({ message: `Algo deu errado! Mensagem: ${err.message}` });

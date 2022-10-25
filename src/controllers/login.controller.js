@@ -1,10 +1,8 @@
-const jwt = require('jsonwebtoken');
 const { UserService } = require('../services');
-require('dotenv');
+const generateUserToken = require('../utils/generateUserToken');
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const secret = process.env.JWT_SECRET;
 
   if (!email || !password) {
     return res.status(400).json({ message: 'Some required fields are missing' });
@@ -16,12 +14,7 @@ const login = async (req, res) => {
     return res.status(400).json({ message: 'Invalid fields' });
   }
 
-  const jwtConfig = {
-    expiresIn: '1d',
-    algorithm: 'HS256',
-  };
-
-  const token = jwt.sign({ data: { email } }, secret, jwtConfig);
+  const token = generateUserToken({ email });
 
   res.status(200).json({ token });
 };
