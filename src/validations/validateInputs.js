@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { newUserSchema } = require('./schema');
+const { newUserSchema, categoryNameSchema } = require('./schema');
 
 const validateNewUser = async (newUser) => {
   const { error } = newUserSchema.validate(newUser);
@@ -17,6 +17,16 @@ const validateNewUser = async (newUser) => {
   }
 };
 
+const validateNewCategory = (name) => {
+  const { error } = categoryNameSchema.validate({ name });
+  if (error) {
+    const e = new Error(error.message);
+    e.name = 'InvalidValue';
+    throw e;
+  }
+};
+
 module.exports = {
   validateNewUser,
+  validateNewCategory,
 };
