@@ -2,6 +2,8 @@ const errorTypes = {
   MissingValue: 400,
   InvalidValue: 400,
   UserAlreadyRegistered: 409,
+  TokenNotFound: 401,
+  JsonWebTokenError: 401,
 };
 
 module.exports = (err, _req, res, _next) => {
