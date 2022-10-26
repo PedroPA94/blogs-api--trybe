@@ -1,14 +1,12 @@
-const { UserService } = require('../services');
-const errorMap = require('../utils/errorMap');
+const { userService } = require('../services');
 const generateUserToken = require('../utils/generateUserToken');
 
 const createUser = async (req, res) => {
   const newUser = req.body;
 
-  const { type, message } = await UserService.createUser(newUser);
-  if (type) return res.status(errorMap.mapError(type)).json({ message });
+  const { password: _, ...user } = await userService.createUser(newUser);
 
-  const token = generateUserToken({ email: message.email });
+  const token = generateUserToken({ email: user.email });
 
   res.status(201).json({ token });
 };
