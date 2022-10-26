@@ -6,6 +6,8 @@ require('express-async-errors');
 const router = express.Router();
 
 router.post('/', userController.createUser);
-router.get('/', auth, (_req, _res) => console.log('09'));
+
+router.use(auth);
+router.get('/', userController.getUsers);
 
 module.exports = router;
