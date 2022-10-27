@@ -1,6 +1,10 @@
 const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, User, Category } = require('../models');
-const { validateNewPost, validateUpdatePost } = require('../validations/validateInputs');
+const { 
+  validateNewPost, 
+  validateUpdatePost, 
+  validatePostUser, 
+} = require('../validations/validateInputs');
 const config = require('../config/config');
 
 const env = process.env.NODE_ENV || 'development';
@@ -47,17 +51,30 @@ const getPostById = async (id) => BlogPost.findAll({
 const updatePost = async (id, title, content, userId) => {
   await validateUpdatePost(id, title, content, userId);
 
-  const updatedPost = await BlogPost.update(
+  return BlogPost.update(
     { title, content },
     { where: { id } },
   );
+};
 
-  return updatedPost;
+const deletePost = async (id, userId) => {
+  const post = await BlogPost.findByPk(id);
+
+  if (post === null) {
+    const e = new Error('Post does not exist');
+    e.name = 'PostNotFound';
+    throw e;
+  }
+
+  await validatePostUser(id, userId);
+
+  return BlogPost.destroy({ where: { id } });
 };
 
 module.exports = {
   createPost,
   getPosts,
   getPostById,
-  updatePost, 
+  updatePost,
+  deletePost,
 };

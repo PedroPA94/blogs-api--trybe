@@ -50,7 +50,7 @@ const validateNewPost = async (newPost) => {
 
 const validatePostUser = async (postId, userId) => {
   const { dataValues: { userId: postUser } } = await BlogPost.findByPk(postId);
-  console.log('id', postUser, 'user', userId);
+
   if (postUser !== userId) {
     const e = new Error('Unauthorized user');
     e.name = 'UnauthorizedUser';
@@ -74,4 +74,5 @@ module.exports = {
   validateNewCategory,
   validateNewPost,
   validateUpdatePost,
+  validatePostUser,
 };
