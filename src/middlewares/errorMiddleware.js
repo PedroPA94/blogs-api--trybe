@@ -7,6 +7,7 @@ const errorTypes = {
   UserNotFound: 404,
   CategoryNotFound: 400,
   PostNotFound: 404,
+  UnauthorizedUser: 401,
 };
 
 module.exports = (err, _req, res, _next) => {

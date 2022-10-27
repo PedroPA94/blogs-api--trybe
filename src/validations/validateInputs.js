@@ -1,5 +1,5 @@
-const { User, Category } = require('../models');
-const { newUserSchema, categoryNameSchema, newPostSchema } = require('./schema');
+const { User, Category, BlogPost } = require('../models');
+const { newUserSchema, categoryNameSchema, newPostSchema, updatePostSchema } = require('./schema');
 
 const validateNewUser = async (newUser) => {
   const { error } = newUserSchema.validate(newUser);
@@ -48,8 +48,30 @@ const validateNewPost = async (newPost) => {
   await validateCategories(newPost.categoryIds);
 };
 
+const validatePostUser = async (postId, userId) => {
+  const { dataValues: { userId: postUser } } = await BlogPost.findByPk(postId);
+  console.log('id', postUser, 'user', userId);
+  if (postUser !== userId) {
+    const e = new Error('Unauthorized user');
+    e.name = 'UnauthorizedUser';
+    throw e;
+  }
+};
+
+const validateUpdatePost = async (id, title, content, userId) => {
+  const { error } = updatePostSchema.validate({ title, content });
+  if (error) {
+    const e = new Error('Some required fields are missing');
+    e.name = 'InvalidValue';
+    throw e;
+  }
+
+  await validatePostUser(id, userId);
+};
+
 module.exports = {
   validateNewUser,
   validateNewCategory,
   validateNewPost,
+  validateUpdatePost,
 };

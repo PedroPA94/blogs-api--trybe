@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, User, Category } = require('../models');
-const { validateNewPost } = require('../validations/validateInputs');
+const { validateNewPost, validateUpdatePost } = require('../validations/validateInputs');
 const config = require('../config/config');
 
 const env = process.env.NODE_ENV || 'development';
@@ -44,8 +44,20 @@ const getPostById = async (id) => BlogPost.findAll({
   ],
 });
 
+const updatePost = async (id, title, content, userId) => {
+  await validateUpdatePost(id, title, content, userId);
+
+  const updatedPost = await BlogPost.update(
+    { title, content },
+    { where: { id } },
+  );
+
+  return updatedPost;
+};
+
 module.exports = {
   createPost,
   getPosts,
   getPostById,
+  updatePost, 
 };
