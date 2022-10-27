@@ -1,7 +1,8 @@
 require('dotenv');
 const jwt = require('jsonwebtoken');
+const { userService } = require('../services');
 
-module.exports = (req, _res, next) => {
+module.exports = async (req, _res, next) => {
   const { authorization: token } = req.headers;
   const secret = process.env.JWT_SECRET;
 
@@ -12,7 +13,9 @@ module.exports = (req, _res, next) => {
   }
 
   try {
-    jwt.verify(token, secret);
+    const { data } = jwt.verify(token, secret);
+    const user = await userService.getUserById(data.user.dataValues.id);
+    req.user = user.dataValues;
     next();
   } catch (e) {
     e.message = 'Expired or invalid token';

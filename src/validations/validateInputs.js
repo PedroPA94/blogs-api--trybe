@@ -1,5 +1,5 @@
-const { User } = require('../models');
-const { newUserSchema, categoryNameSchema } = require('./schema');
+const { User, Category } = require('../models');
+const { newUserSchema, categoryNameSchema, newPostSchema } = require('./schema');
 
 const validateNewUser = async (newUser) => {
   const { error } = newUserSchema.validate(newUser);
@@ -26,7 +26,30 @@ const validateNewCategory = (name) => {
   }
 };
 
+const validateCategories = async (categoryIds) => {
+  const promises = categoryIds.map((id) => Category.findByPk(id));
+  const foundCategories = await Promise.all(promises);
+
+  if (foundCategories.some((category) => category === null)) {
+    const e = new Error('one or more "categoryIds" not found');
+    e.name = 'CategoryNotFound';
+    throw e;
+  }
+};
+
+const validateNewPost = async (newPost) => {
+  const { error } = newPostSchema.validate(newPost);
+  if (error) {
+    const e = new Error('Some required fields are missing');
+    e.name = 'InvalidValue';
+    throw e;
+  }
+
+  await validateCategories(newPost.categoryIds);
+};
+
 module.exports = {
   validateNewUser,
   validateNewCategory,
+  validateNewPost,
 };
