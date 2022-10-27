@@ -6,6 +6,7 @@ const errorTypes = {
   JsonWebTokenError: 401,
   UserNotFound: 404,
   CategoryNotFound: 400,
+  PostNotFound: 404,
 };
 
 module.exports = (err, _req, res, _next) => {
