@@ -2,18 +2,18 @@
 
 migrations e models
 
-This project is a RESTful API for managing a medieval store - it sells products for heroes on an adventure! This API creates and lists products, orders and users. There's also authentication with Json Web Token.
+In this RESTful API simulating a blog, an authenticated user can post a new blog post with a title, content and related categories. It is also possible to create, delete and list users, create and list categories and create, list, delete and update posts. The API uses Json Web Token for authentication.
 
-The main focus of this project was to practice the recently learned **Typescript** language. Most of this project was written using `classes` as an introductory practice of Object-Oriented Programming (OOP). Typescript's `interfaces` were also used.
+In this project, MySQL is used as a database manager, and the communications between it and the app are made with the ORM Sequelize. All models and migrations were made by me.
 
-The project was built with a three-layered software architecture: the Model layer, responsible for communicating with the database, the Service layer in the middle, which validates the business rules and the Controller layer, which receives and responds HTTP requests.
+Like other Back-end projects I did, this project was built with a three-layered software architecture: the Model layer, responsible for communicating with the database, the Service layer in the middle, which validates the business rules, and the Controller layer, which receives and responds HTTP requests.
 
 This project was developed while studying Back-end web development [@betrybe](https://github.com/betrybe). The files I worked on are in the ```/src``` folder. I got approval on 100% of this project's requirements.
 
 <details>
 <summary><strong>Database diagram</strong></summary>
 
-![EER Diagram](https://github.com/tryber/sd-022-a-project-trybesmith/blob/main/images/diagram-der.png)
+![EER Diagram](https://user-images.githubusercontent.com/75266925/203593073-41acb414-3a4e-4bf2-95fc-78aa08276c38.png)
 
 </details>
 
