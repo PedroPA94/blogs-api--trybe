@@ -1,7 +1,5 @@
 # Welcome!
 
-migrations e models
-
 In this RESTful API simulating a blog, an authenticated user can post a new blog post with a title, content and related categories. It is also possible to create, delete and list users, create and list categories and create, list, delete and update posts. The API uses Json Web Token for authentication.
 
 In this project, MySQL is used as a database manager, and the communications between it and the app are made with the ORM Sequelize. All models and migrations were made by me.
