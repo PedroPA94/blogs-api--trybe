@@ -115,17 +115,17 @@ Examples of *invalid* requests:
 ```json
 [
   {
-    "id": 1,
-    "name": "Poção de cura",
-    "amount": "20 gold",
-    "orderId": null
+      "id": 1,
+      "displayName": "Lewis Hamilton",
+      "email": "lewishamilton@gmail.com",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
   },
   {
-    "id": 2,
-    "name": "Escudo do Herói",
-    "amount": "100 diamond",
-    "orderId": 1
-  }
+      "id": 2,
+      "displayName": "Brett Wiltshire",
+      "email": "brett@email.com",
+      "image": "http://4.bp.blogspot.com/_YA50adQ-7vQ/S1gfR_6ufpI/AAAAAAAAAAk/1ErJGgRWZDg/S45/brett.png"
+  },
 ]
 ```
 
