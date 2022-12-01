@@ -1,0 +1,608 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Blogs API",
+    "description": "In this RESTful API simulating a blog, an authenticated user can post a new blog post with a title, content and related categories. It is also possible to create, delete and list users, create and list categories and create, list, delete and update posts. The API uses Json Web Token for authentication. [Checkout the Github repo.](https://github.com/PedroPA94/blogs-api--trybe)",
+    "contact": {
+      "email": "ppapinia@gmail.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Rota para testes"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "User login",
+        "description": "Validates the sent email and password and returns a JWT token",
+        "tags": ["Login"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK - Valid email and password, returns authentication token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "summary": "Creates a new user",
+        "description": "Creates a new user and returns a valid Json Web Token.",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created - Valid new user data, returns authentication token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      },
+      "get": {
+        "summary": "Lists all registered users",
+        "description": "Returns an array with all the registered users ordered by their id, or an empty array if there are no users.",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK - List of all registered users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListUsers"
+                }
+              }
+            }
+          }
+        }
+      } 
+    },
+    "/user/{id}": {
+      "get": {
+        "summary": "Returns the user with the specified id",
+        "description": "Returns the user with the specified id",
+        "tags": ["User"],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "description": "User id",
+          "required": true
+        }],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK - User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/user/me": {
+      "delete": {
+        "summary": "Deletes the current user",
+        "description": "Deletes the logged in user according to the id in the token",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "204": {
+            "description": "No content - User deleted"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Lists all registered categories",
+        "description": "Returns an array with all the registered categories, or an empty array if there are none",
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK - List of all categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListCategories"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates a new category",
+        "description": "Adds a new category in the database and returns it with an inserted id",
+        "tags": ["Categories"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": "string"
+                },
+                "example": {
+                  "name": "Typescript"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created - Category added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/post": {
+      "get": {
+        "summary": "Lists all registered posts",
+        "description": "Returns an array with all the registered posts, or an empty array if there are none",
+        "tags": ["Post"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "List of all posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FullPost"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Creates a new post",
+        "description": "Adds a new post and links it with its respective categories. Returns it with an inserted id",
+        "tags": ["Post"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "categoryIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "example": {
+                  "title": "Latest updates, August 1st",
+                  "content": "The whole text for the blog post goes here in this key",
+                  "categoryIds": [1, 2]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created - Post created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/post/{id}": {
+      "put": {
+        "summary": "Updates the post with the specified id",
+        "description": "Updates and returns the post with the specified id. Only the user that is the author of the post can update it, and only the 'title' and 'content' fields are updatable",
+        "tags": ["Post"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters":[{
+          "name": "id",
+          "in": "path",
+          "description": "Post id",
+          "required": true
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "title": "Post do Ano",
+                  "content": "Melhor post do ano"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK - Post updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FullPost"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes the post with the specified id",
+        "description": "Deletes the post with the specified id. Only the user that is the author of the post can delete it.",
+        "tags": ["Post"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{
+          "name": "id",
+          "in": "path",
+          "description": "Post id",
+          "required": true
+        }],
+        "responses": {
+          "204": {
+            "description": "No content - Post deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/post/search?q{searchTerm}": {
+      "get": {
+        "summary": "Lists posts that match the search term",
+        "description": "Returns an array of posts matching the search term in their titles and/or content. Returns an empty array if there are no matches.",
+        "tags": ["Post"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{
+          "name": "searchTerm",
+          "in": "query",
+          "description": "Search term for the query",
+          "required": "false"
+        }],
+        "responses": {
+          "200": {
+            "description": "OK - List of matching posts (in this example, the searched term was 'post do ano')",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FullPost"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "lewishamilton@gmail.com",
+          "password": "123456"
+        }
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": 1,
+          "displayName": "Lewis Hamilton",
+          "email": "lewishamilton@gmail.com",
+          "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+        } 
+      },
+      "NewUser": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "displayName": "Brett Wiltshire",
+          "email": "brett@email.com",
+          "password": "123456",
+          "image": "http://4.bp.blogspot.com/_YA50adQ-7vQ/S1gfR_6ufpI/AAAAAAAAAAk/1ErJGgRWZDg/S45/brett.png"
+        } 
+      },
+      "ListUsers": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/User"
+        },
+        "example": [
+          {
+            "id": 1,
+            "displayName": "Lewis Hamilton",
+            "email": "lewishamilton@gmail.com",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+          },
+          {
+            "id": 2,
+            "displayName": "Brett Wiltshire",
+            "email": "brett@email.com",
+            "image": "http://4.bp.blogspot.com/_YA50adQ-7vQ/S1gfR_6ufpI/AAAAAAAAAAk/1ErJGgRWZDg/S45/brett.png"
+          }
+        ]
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": "number",
+          "name": "string"
+        },
+        "example": {
+          "id": 3,
+          "name": "Typescript"
+        }
+      },
+      "ListCategories": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Category"
+        },
+        "example": [
+          {
+            "id": 1,
+            "name": "Inovação"
+          },
+          {
+            "id": 2,
+            "name": "Escola"
+          }
+        ]
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "published": {
+            "type": "string"
+          },
+          "updated": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": 3,
+          "title": "Latest updates, August 1st",
+          "content": "The whole text for the blog post goes here in this key",
+          "userId": 1,
+          "updated": "2022-05-18T18:00:01.196Z",
+          "published": "2022-05-18T18:00:01.196Z"
+        }
+      },
+      "FullPost": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "number"
+          },
+          "published": {
+            "type": "string"
+          },
+          "updated": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "$ref": "#/components/schemas/User"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Category"    
+            }
+          }
+        },
+        "example": {
+          "id": 1,
+          "title": "Post do Ano",
+          "content": "Melhor post do ano",
+          "userId": 1,
+          "published": "2011-08-01T19:58:00.000Z",
+          "updated": "2011-08-01T19:58:51.000Z",
+          "user": {
+            "id": 1,
+            "displayName": "Lewis Hamilton",
+            "email": "lewishamilton@gmail.com",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg"
+          },
+          "categories": [
+            {
+              "id": 1,
+              "name": "Inovação"
+            }
+          ]
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request - Might be a request without any of the required fields or with invalid values"
+      },
+      "Conflict": {
+        "description": "Conflict - User already registered"
+      },
+      "NotFound": {
+        "description": "Object with the specified id not found"
+      },
+      "Unauthorized": {
+        "description": "Unauthorized user"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
