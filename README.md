@@ -172,11 +172,11 @@ Examples of *invalid* requests:
   
 - Response for request with invalid "email" (status 400):
   
-  ```json
+```json
 {
   "message": "\"email\" must be a valid email"
 }
-  ```
+```
 
 - Response for request with an invalid "password" length (status 400):
 
