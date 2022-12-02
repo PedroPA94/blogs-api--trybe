@@ -351,7 +351,7 @@
         }
       }
     },
-    "/post/search?q{searchTerm}": {
+    "/post/search?q={searchTerm}": {
       "get": {
         "summary": "Lists posts that match the search term",
         "description": "Returns an array of posts matching the search term in their titles and/or content. Returns an empty array if there are no matches.",
