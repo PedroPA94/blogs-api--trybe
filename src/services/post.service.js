@@ -8,8 +8,7 @@ const {
 } = require('../validations/validateInputs');
 const config = require('../config/config');
 
-const env = process.env.NODE_ENV || 'development';
-const sequelize = new Sequelize(config[env]);
+const sequelize = new Sequelize(config);
 
 const createPost = async (userId, newPost) => {
   await validateNewPost(newPost);
