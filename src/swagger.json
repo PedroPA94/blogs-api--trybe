@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Blogs API",
-    "description": "In this RESTful API simulating a blog, an authenticated user can post a new blog post with a title, content and related categories. It is also possible to create, delete and list users, create and list categories and create, list, delete and update posts. The API uses Json Web Token for authentication. [Checkout the Github repo.](https://github.com/PedroPA94/blogs-api--trybe)",
+    "description": "In this RESTful API simulating a blog, an authenticated user can post a new blog post with a title, content and related categories. It is also possible to create, delete and list users, create and list categories and create, list, delete and update posts. The API uses Json Web Token for authentication. [Checkout the Github repo.](https://github.com/PedroPA94/blogs-api--trybe) \n\n **A token is required to access most of the endpoints. To obtain one, either use the login route or create a new user.**",
     "contact": {
       "email": "ppapinia@gmail.com"
     },
