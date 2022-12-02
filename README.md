@@ -8,6 +8,8 @@ Like other Back-end projects I did, this project was built with a three-layered 
 
 This project was developed while studying Back-end web development [@betrybe](https://github.com/betrybe). The files I worked on are in the ```/src``` folder. I got approval on 100% of this project's requirements.
 
+[Check it out!](https://blogs-api-backend-production.up.railway.app/api-docs/) (deployed with Railway, API docs with Swagger)
+
 <details>
 <summary><strong>Database diagram</strong></summary>
 
