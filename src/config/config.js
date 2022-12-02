@@ -1,20 +1,11 @@
 require('dotenv').config();
 
-const environment = process.env.NODE_ENV || 'test';
-
-const suffix = {
-  dev: '-dev',
-  development: '-dev',
-  test: '-test',
-};
-
 const options = {
-  host: process.env.MYSQL_HOST || 'localhost',
-  port: process.env.MYSQL_PORT || '3306',
-  database: 
-    `${process.env.MYSQL_DB_NAME || 'blogs-api'}${suffix[environment] || suffix.test}`,
-  username: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_PASSWORD || '1234',
+  username: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  host: process.env.MYSQLHOST,
+  port: process.env.MYSQLPORT,
   dialect: 'mysql',
   dialectOptions: {
     timezone: 'Z',
@@ -22,11 +13,4 @@ const options = {
   logging: process.env.DEBUG !== 'false',
 };
 
-module.exports = {
-  development: {
-    ...options,
-  },
-  test: {
-    ...options,
-  },
-};
+module.exports = options;
