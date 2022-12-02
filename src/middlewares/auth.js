@@ -13,7 +13,7 @@ module.exports = async (req, _res, next) => {
   }
 
   try {
-    const { data } = jwt.verify(token, secret);
+    const { data } = jwt.verify(token.replace('Bearer ', ''), secret);
     const user = await userService.getUserById(data.user.dataValues.id);
     req.user = user.dataValues;
     next();
