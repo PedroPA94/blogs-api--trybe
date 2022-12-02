@@ -358,7 +358,7 @@
         "tags": ["Post"],
         "security": [{ "bearerAuth": [] }],
         "parameters": [{
-          "name": "searchTerm",
+          "name": "q",
           "in": "query",
           "description": "Search term for the query",
           "required": "false"
