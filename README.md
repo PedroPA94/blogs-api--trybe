@@ -4,6 +4,8 @@ In this RESTful API simulating a blog, an authenticated user can post a new blog
 
 In this project, MySQL is used as a database manager, and the communications between it and the app are made with the ORM Sequelize. All models and migrations were made by me.
 
+[Check the documentation](https://blogs-api-backend-production.up.railway.app/api-docs/)
+
 Like other Back-end projects I did, this project was built with a three-layered software architecture: the Model layer, responsible for communicating with the database, the Service layer in the middle, which validates the business rules, and the Controller layer, which receives and responds HTTP requests.
 
 This project was developed while studying Back-end web development [@betrybe](https://github.com/betrybe). The files I worked on are in the ```/src``` folder. I got approval on 100% of this project's requirements.
